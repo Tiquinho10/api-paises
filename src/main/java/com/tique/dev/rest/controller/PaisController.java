@@ -32,6 +32,13 @@ public class PaisController {
     private PaisService service;
 
 
+    @GetMapping(value = "/test")
+    public  String test(){
+
+        return "hello world";
+    }
+
+
     @GetMapping("/search")
     public ResponseEntity<List<PaisDTO>> findByName(@RequestParam(name = "nome", required = true)String name){
      

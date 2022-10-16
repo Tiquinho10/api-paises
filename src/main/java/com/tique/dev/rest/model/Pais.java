@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -25,6 +27,11 @@ public class Pais implements Serializable {
     private String subRegiao;
     private Double area;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+
     public Pais(){}
 
     public Pais(String nome, String capital, String regiao, String subRegiao, Double area) {
@@ -33,6 +40,10 @@ public class Pais implements Serializable {
         this.regiao = regiao;
         this.subRegiao = subRegiao;
         this.area = area;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     public Long getId() {
