@@ -21,8 +21,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -52,8 +55,7 @@ public class MyUserService implements UserDetailsService{
     public List<MyUserDTO> findAll(){
        List<User> list = repository.findAll();
 
-       return list.stream().map(doc -> new MyUserDTO(doc)
-       ).collect(Collectors.toList());
+       return list.stream().map(MyUserDTO::new).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -61,7 +63,7 @@ public class MyUserService implements UserDetailsService{
 
        Page<User> list = repository.findAll(pageable);
 
-       return list.map(user -> new MyUserDTO(user));
+       return list.map(MyUserDTO::new);
     }
 
     @Transactional(readOnly = true)
@@ -71,7 +73,7 @@ public class MyUserService implements UserDetailsService{
         Optional<User> obj = repository.findById(id);
 
        User entity = obj.orElseThrow(
-        () -> new IllegalStateException("Usero com o id: " + id + " nao encontrado")
+        () -> new IllegalStateException("Usuario com o id: " + id + " nao encontrado")
        );
 
        return new MyUserDTO(entity);
@@ -93,17 +95,25 @@ public class MyUserService implements UserDetailsService{
         Optional<User> obj = repository.findById(id);
 
         User entity = obj.orElseThrow(
-            () -> new IllegalStateException("Usero com o id: " + id + " nao encotrado")
+            () -> new IllegalStateException("Usuario com o id: " + id + " nao encotrado")
         );
+
+          if (dto.getPassword() == null)
+               dto.setPassword(entity.getPassword());
           copyDtoToEntity(dto, entity);
 
 
-          return new MyUserDTO(entity);
+
+
+        return new MyUserDTO(entity);
 
 
     }
 
+
+
     public void delete(Long id){
+        authService.validateSelfOrAdmin(id);
         try {
             repository.deleteById(id);
         }catch(EmptyResultDataAccessException e){
@@ -115,36 +125,18 @@ public class MyUserService implements UserDetailsService{
 
     private void copyDtoToEntity(MyUserDTO dto, User entity){
        checkEmail(dto.getEmail());
-        checkEmail(dto.getEmail());
         entity.setFirstName(dto.getFirstName());
         entity.setLastName(dto.getLastName());
         entity.setEmail(dto.getEmail());
-        logger.info("service dto " + dto.toString());
-        logger.info("service role " + dto.getRoleUser());
         entity.setRole(dto.getRoleUser());
         entity.setPassword(passwordEncoder.encode(dto.getPassword()));
-
-
-
-
-//       entity.getRoles().clear();
-//       for(RoleDTO roleDto : dto.getRoles()){
-//        Optional <Role> obj = roleRepository.findById(roleDto.getId());
-//
-//        Role role = obj.orElseThrow(
-//        ()-> new IllegalStateException("dto vazio")
-//        );
-//
-//
-//        entity.getRoles().add(role);
-//    }
 }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // TODO Auto-generated method stub
+
         Optional<User> obj = repository.findByEmail(username);
-        
+
         if(!obj.isPresent()){
             logger.error("O usuario com o email: " + username + " nao existe");
             throw new IllegalStateException("O usuario com o email: " + username + " nao existe");
@@ -153,7 +145,7 @@ public class MyUserService implements UserDetailsService{
         logger.info("User found: " + username);
         User user =  obj.get();
         return user;
-    } 
+    }
     
     private void checkEmail(String email){
      Optional<User> obj = repository.findByEmail(email);

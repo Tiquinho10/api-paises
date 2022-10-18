@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -29,6 +28,7 @@ public class FirstUserConfig implements ApplicationRunner {
         if (userRepository.count() != 0) {
             return;
         }
+
 
         logger.info("Nenhum usuário encontrado, cadastrando usuários padrão.");
 

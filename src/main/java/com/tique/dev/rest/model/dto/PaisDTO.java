@@ -3,26 +3,39 @@ package com.tique.dev.rest.model.dto;
 import javax.validation.constraints.NotBlank;
 
 import com.tique.dev.rest.model.Pais;
+import com.tique.dev.rest.model.User;
+import com.tique.dev.rest.services.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class PaisDTO {
-    
+
+
     private Long id;
    @NotBlank(message =  "campo requerido")
     private String nome;
+    @NotBlank(message =  "campo requerido")
     private String capital;
+    @NotBlank(message =  "campo requerido")
     private String regiao;
     private String subRegiao;
     private Double area;
 
+    private String adicionadoPor;
+
+
     public PaisDTO(){}
 
+
     public PaisDTO(Pais entity){
+
+
         id = entity.getId();
         nome = entity.getNome();
         capital = entity.getCapital();
         regiao = entity.getRegiao();
         subRegiao = entity.getRegiao();
         area = entity.getArea();
+        adicionadoPor = entity.getUser().getUsername();
     }
 
     public Long getId() {
@@ -73,8 +86,12 @@ public class PaisDTO {
         this.area = area;
     }
 
-    
+    public String getAdicionadoPor() {
+        return adicionadoPor;
+    }
 
-    
+    public void setAdicionadoPor(String adicionadoPor) {
+        this.adicionadoPor = adicionadoPor;
+    }
 
 }

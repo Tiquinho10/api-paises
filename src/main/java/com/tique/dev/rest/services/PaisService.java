@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.tique.dev.rest.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -22,15 +23,21 @@ import com.tique.dev.rest.repository.PaisRepository;
 @Service
 public class PaisService {
      
-    @Autowired
-    private PaisRepository repository;
+    private final PaisRepository repository;
+
+    private final AuthService authService;
+
+    public PaisService(PaisRepository repository, AuthService authService) {
+        this.repository = repository;
+        this.authService = authService;
+    }
 
     @Transactional(readOnly = true)
     public List<PaisDTO> findAll(){
 
         List<Pais> list = repository.findAll();
 
-        return list.stream().map(pais -> new PaisDTO(pais)).collect(Collectors.toList());
+        return list.stream().map(PaisDTO::new).collect(Collectors.toList());
 
     }
 
@@ -38,14 +45,15 @@ public class PaisService {
     public Page<PaisDTO> findAllPaged(Pageable pageable){
         Page<Pais> list = repository.findAll(pageable);
   
-        return list.map(pais -> new PaisDTO(pais));
+        return list.map(PaisDTO::new);
       }
 
       @Transactional(readOnly = true)
      public List<PaisDTO> findByName(String name){
        List<Pais> list = repository.findByNomeLike(name);
 
-       return list.stream().map(pais -> new PaisDTO(pais)).collect(Collectors.toList());
+
+       return list.stream().map(PaisDTO::new).collect(Collectors.toList());
      }
 
 
@@ -64,10 +72,12 @@ public class PaisService {
 
     @Transactional
     public PaisDTO create(PaisDTO dto){
+        User user = authService.authenticated();
         
         Pais entity = new Pais();
 
         copyDtoToEntity(dto, entity);
+        entity.setUser(user);
 
         entity = repository.save(entity);
 
@@ -77,7 +87,7 @@ public class PaisService {
 
     @Transactional
     public PaisDTO update(Long id,PaisDTO dto){
-        
+          authService.validateSelfOrAdminForEdit(id);
         Optional<Pais> paisOptional = repository.findById(id);
 
     Pais entity = paisOptional.orElseThrow(
@@ -92,6 +102,7 @@ public class PaisService {
     }
 
     public void delete(Long id){
+        authService.validateSelfOrAdminForEdit(id);
         try {
             repository.deleteById(id);
         } catch(EmptyResultDataAccessException e){
@@ -109,6 +120,7 @@ public class PaisService {
        entity.setRegiao(dto.getRegiao());
        entity.setSubRegiao(dto.getSubRegiao());
        entity.setArea(dto.getArea());
+
     }
 
     private void checkName(String nome){

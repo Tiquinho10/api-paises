@@ -21,6 +21,8 @@ import com.tique.dev.rest.model.dto.UserDTO;
 import com.tique.dev.rest.model.dto.UserInsertDTO;
 import com.tique.dev.rest.services.UserService;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping(path = "/user")
 public class UserController {
@@ -54,7 +56,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> insertDoc(@RequestBody UserInsertDTO dto){
+    public ResponseEntity<UserDTO> insertDoc(@Valid @RequestBody UserInsertDTO dto){
             
      UserDTO newDto = service.save(dto);
 
@@ -66,7 +68,7 @@ public class UserController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateDoc(@PathVariable Long id, @RequestBody UserDTO dto){
+    public ResponseEntity<UserDTO> updateDoc(@PathVariable Long id,@Valid @RequestBody UserDTO dto){
 
         dto = service.update(id, dto);
 

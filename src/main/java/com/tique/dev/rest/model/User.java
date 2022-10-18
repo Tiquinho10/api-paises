@@ -1,5 +1,7 @@
 package com.tique.dev.rest.model;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -8,6 +10,7 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,7 +18,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "tb_user")
-public class User implements UserDetails{
+public class User implements UserDetails, Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private static Logger logger = LoggerFactory.getLogger(User.class);
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +32,9 @@ public class User implements UserDetails{
     private String password;
     private RoleUser role;
 
-    @OneToMany(mappedBy = "user")
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Pais> pais = new ArrayList<>();
 
 
@@ -42,9 +49,7 @@ public class User implements UserDetails{
 
 
 
-    public User(){
-
-    }
+    public User(){}
 
     public RoleUser getRole() {
         return role;

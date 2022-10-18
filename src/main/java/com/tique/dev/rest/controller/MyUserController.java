@@ -1,19 +1,19 @@
 package com.tique.dev.rest.controller;
 
 import com.tique.dev.rest.model.dto.MyUserDTO;
-import com.tique.dev.rest.model.dto.MyUserDTO;
-import com.tique.dev.rest.model.dto.UserInsertDTO;
 import com.tique.dev.rest.services.MyUserService;
-import com.tique.dev.rest.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
+import java.lang.reflect.Field;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/myuser")
@@ -51,7 +51,7 @@ public class MyUserController {
     }
 
     @PostMapping
-    public ResponseEntity<MyUserDTO> insertMyUser(@RequestBody MyUserDTO dto){
+    public ResponseEntity<MyUserDTO> insertMyUser(@Valid @RequestBody MyUserDTO dto){
             
      MyUserDTO newDto = service.saveMy(dto);
 
@@ -63,15 +63,16 @@ public class MyUserController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<MyUserDTO> updateDoc(@PathVariable Long id, @RequestBody MyUserDTO dto){
+    public ResponseEntity<MyUserDTO> updateMyUser(@PathVariable Long id,@Valid @RequestBody MyUserDTO dto){
 
         dto = service.update(id, dto);
 
         return ResponseEntity.ok().body(dto);
     }
 
+
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteDoc(@PathVariable Long id){
+    public ResponseEntity deleteMyUser(@PathVariable Long id){
           service.delete(id);
 
           return ResponseEntity.noContent().build();

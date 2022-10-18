@@ -1,6 +1,7 @@
 
 package com.tique.dev.rest.model;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import javax.persistence.Column;
@@ -15,6 +16,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "tb_pais")
 public class Pais implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
     
     @Id
@@ -44,6 +46,10 @@ public class Pais implements Serializable {
 
     public User getUser() {
         return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Long getId() {

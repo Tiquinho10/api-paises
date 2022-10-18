@@ -18,6 +18,7 @@ public class UserDTO {
     private String lastName;
 
     @Email(message = "Por favor digite um email valido")
+    @NotBlank(message =  "campo requerido")
     private String email;
     private String password;
 
