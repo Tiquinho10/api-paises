@@ -198,7 +198,6 @@ public class User implements UserDetails, Serializable {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", pais=" + pais +
                 ", roles=" + role +
                 '}';
     }

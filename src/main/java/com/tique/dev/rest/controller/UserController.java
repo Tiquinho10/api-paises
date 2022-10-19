@@ -1,20 +1,15 @@
 package com.tique.dev.rest.controller;
 
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.util.List;
 
+import com.tique.dev.rest.model.dto.MyUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.tique.dev.rest.model.dto.UserDTO;
@@ -27,8 +22,11 @@ import javax.validation.Valid;
 @RequestMapping(path = "/user")
 public class UserController {
 
-    @Autowired
-    private UserService service;
+    private final UserService service;
+
+    public UserController(UserService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public ResponseEntity<List<UserDTO>> findAll(){
@@ -73,6 +71,12 @@ public class UserController {
         dto = service.update(id, dto);
 
         return ResponseEntity.ok().body(dto);
+    }
+
+    @PatchMapping("/{id}")
+    public  ResponseEntity<UserDTO> patchUpdate(@PathVariable Long id, @RequestBody UserDTO dto) throws InvocationTargetException, IllegalAccessException {
+        dto = service.updatePatch(id, dto);
+        return ResponseEntity.ok(dto);
     }
 
     @DeleteMapping("/{id}")

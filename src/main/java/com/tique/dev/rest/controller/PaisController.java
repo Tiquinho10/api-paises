@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.util.List;
 
@@ -76,8 +77,14 @@ public class PaisController {
         return ResponseEntity.ok().body(dto);
     }
 
+    @PatchMapping("/{id}")
+    public  ResponseEntity<PaisDTO> patchUpdate(@PathVariable Long id,@RequestBody PaisDTO dto) throws InvocationTargetException, IllegalAccessException {
+        dto = service.updatePatch(id, dto);
+        return ResponseEntity.ok(dto);
+    }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
 
         return ResponseEntity.noContent().build();

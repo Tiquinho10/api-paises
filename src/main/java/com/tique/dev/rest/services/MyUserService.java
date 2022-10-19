@@ -1,5 +1,6 @@
 package com.tique.dev.rest.services;
 
+import com.tique.dev.rest.components.NullAwareBeanUtilBean;
 import com.tique.dev.rest.model.Role;
 import com.tique.dev.rest.model.User;
 import com.tique.dev.rest.model.dto.MyUserDTO;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -32,7 +34,7 @@ import java.util.stream.Collectors;
 @Service
 public class MyUserService implements UserDetailsService{
 
-    private static Logger logger = LoggerFactory.getLogger(MyUserService.class);
+    private static final Logger logger = LoggerFactory.getLogger(MyUserService.class);
 
     private final BCryptPasswordEncoder passwordEncoder;
 
@@ -40,13 +42,15 @@ public class MyUserService implements UserDetailsService{
 
     private final UserRepository repository;
 
-    private final RoleRepository roleRepository;
+    private  final NullAwareBeanUtilBean awareBeanUtilBean;
 
-    public MyUserService(BCryptPasswordEncoder passwordEncoder, UserRepository repository, RoleRepository roleRepository,
+
+
+    public MyUserService(BCryptPasswordEncoder passwordEncoder, UserRepository repository, NullAwareBeanUtilBean awareBeanUtilBean,
                          AuthService authService) {
         this.passwordEncoder = passwordEncoder;
         this.repository = repository;
-        this.roleRepository = roleRepository;
+        this.awareBeanUtilBean = awareBeanUtilBean;
         this.authService = authService;
     }
 
@@ -70,11 +74,7 @@ public class MyUserService implements UserDetailsService{
     public MyUserDTO findById(Long id){
         authService.validateSelfOrAdmin(id);
 
-        Optional<User> obj = repository.findById(id);
-
-       User entity = obj.orElseThrow(
-        () -> new IllegalStateException("Usuario com o id: " + id + " nao encontrado")
-       );
+       User entity = checkUser(id);
 
        return new MyUserDTO(entity);
     }
@@ -92,24 +92,19 @@ public class MyUserService implements UserDetailsService{
     public MyUserDTO update(Long id, MyUserDTO dto){
         authService.validateSelfOrAdmin(id);
 
-        Optional<User> obj = repository.findById(id);
-
-        User entity = obj.orElseThrow(
-            () -> new IllegalStateException("Usuario com o id: " + id + " nao encotrado")
-        );
-
-          if (dto.getPassword() == null)
-               dto.setPassword(entity.getPassword());
+         User entity = checkUser(id);
           copyDtoToEntity(dto, entity);
+        return new MyUserDTO(entity);
+    }
+    @Transactional
+    public  MyUserDTO updatePatch(Long id, MyUserDTO dto) throws InvocationTargetException, IllegalAccessException {
+        User entity = checkUser(id);
 
-
+        awareBeanUtilBean.copyProperties(entity, dto);
 
 
         return new MyUserDTO(entity);
-
-
     }
-
 
 
     public void delete(Long id){
@@ -137,14 +132,13 @@ public class MyUserService implements UserDetailsService{
 
         Optional<User> obj = repository.findByEmail(username);
 
-        if(!obj.isPresent()){
+        if(obj.isEmpty()){
             logger.error("O usuario com o email: " + username + " nao existe");
             throw new IllegalStateException("O usuario com o email: " + username + " nao existe");
         }
 
         logger.info("User found: " + username);
-        User user =  obj.get();
-        return user;
+        return obj.get();
     }
     
     private void checkEmail(String email){
@@ -152,5 +146,13 @@ public class MyUserService implements UserDetailsService{
 
      if(obj.isPresent())
           throw new IllegalThreadStateException("O usuario com o email: " + email + " ja existe, por favor tente outro");
+    }
+
+    private User checkUser(Long id){
+        Optional<User> obj = repository.findById(id);
+
+        return obj.orElseThrow(
+                () -> new IllegalArgumentException("Usuario com o id: " + id + " nao existe")
+        );
     }
 } 

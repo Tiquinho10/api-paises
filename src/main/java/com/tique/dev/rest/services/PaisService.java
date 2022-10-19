@@ -1,9 +1,11 @@
 package com.tique.dev.rest.services;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.tique.dev.rest.components.NullAwareBeanUtilBean;
 import com.tique.dev.rest.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -27,9 +29,12 @@ public class PaisService {
 
     private final AuthService authService;
 
-    public PaisService(PaisRepository repository, AuthService authService) {
+    private  final NullAwareBeanUtilBean awareBeanUtilBean;
+
+    public PaisService(PaisRepository repository, AuthService authService, NullAwareBeanUtilBean awareBeanUtilBean) {
         this.repository = repository;
         this.authService = authService;
+        this.awareBeanUtilBean = awareBeanUtilBean;
     }
 
     @Transactional(readOnly = true)
@@ -59,11 +64,7 @@ public class PaisService {
 
     @Transactional(readOnly = true)
     public PaisDTO findById(Long id){
-    Optional<Pais> paisOptional = repository.findById(id);
-
-    Pais entity = paisOptional.orElseThrow(
-        () -> new IllegalStateException("O pais com o id: " + id + " nao esta registrado")
-    );
+        Pais entity = checkCountry(id);
 
 
     return new PaisDTO(entity);
@@ -88,17 +89,23 @@ public class PaisService {
     @Transactional
     public PaisDTO update(Long id,PaisDTO dto){
           authService.validateSelfOrAdminForEdit(id);
-        Optional<Pais> paisOptional = repository.findById(id);
-
-    Pais entity = paisOptional.orElseThrow(
-        () -> new IllegalStateException("O pais com o id: " + id + " nao esta registrado")
-    );
+        Pais entity = checkCountry(id);
 
         copyDtoToEntity(dto, entity);
 
 
         return new PaisDTO(entity);
 
+    }
+
+    @Transactional
+    public  PaisDTO updatePatch(Long id, PaisDTO dto) throws InvocationTargetException, IllegalAccessException {
+        Pais entity = checkCountry(id);
+
+        awareBeanUtilBean.copyProperties(entity, dto);
+
+
+        return new PaisDTO(entity);
     }
 
     public void delete(Long id){
@@ -128,6 +135,14 @@ public class PaisService {
 
           if(nomeOptional.isPresent())
                   throw new IllegalStateException("O pais com o nome: " + nome + " ja esta registrado, tente outro nome.");
+    }
+
+    private Pais checkCountry(Long id){
+        Optional<Pais> obj = repository.findById(id);
+
+        return obj.orElseThrow(
+                () -> new IllegalArgumentException("Usuario com o id: " + id + " nao existe")
+        );
     }
 
   
