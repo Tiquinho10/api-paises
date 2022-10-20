@@ -59,7 +59,8 @@ public class MyUserService implements UserDetailsService{
     public List<MyUserDTO> findAll(){
        List<User> list = repository.findAll();
 
-       return list.stream().map(MyUserDTO::new).collect(Collectors.toList());
+       //return list.stream().map(MyUserDTO::new).collect(Collectors.toList());
+       return  list.stream().map(user -> new MyUserDTO(user)).toList();
     }
 
     @Transactional(readOnly = true)
