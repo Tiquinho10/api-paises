@@ -1,17 +1,11 @@
 package com.tique.dev.rest.services;
 
 import com.tique.dev.rest.components.NullAwareBeanUtilBean;
-import com.tique.dev.rest.model.Role;
 import com.tique.dev.rest.model.User;
 import com.tique.dev.rest.model.dto.MyUserDTO;
-import com.tique.dev.rest.model.dto.RoleDTO;
-import com.tique.dev.rest.model.dto.MyUserDTO;
-import com.tique.dev.rest.model.dto.UserInsertDTO;
-import com.tique.dev.rest.repository.RoleRepository;
 import com.tique.dev.rest.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
@@ -22,14 +16,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ReflectionUtils;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class MyUserService implements UserDetailsService{
@@ -59,8 +49,8 @@ public class MyUserService implements UserDetailsService{
     public List<MyUserDTO> findAll(){
        List<User> list = repository.findAll();
 
-       //return list.stream().map(MyUserDTO::new).collect(Collectors.toList());
-       return  list.stream().map(user -> new MyUserDTO(user)).toList();
+       return list.stream().map(MyUserDTO::new).toList();
+
     }
 
     @Transactional(readOnly = true)

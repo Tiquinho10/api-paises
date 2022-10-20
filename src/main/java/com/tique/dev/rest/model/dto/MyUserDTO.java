@@ -4,6 +4,7 @@ import com.tique.dev.rest.model.RoleUser;
 import com.tique.dev.rest.model.User;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -18,6 +19,8 @@ public class MyUserDTO {
     @Email(message = "Por favor digite um email valido")
     @NotNull(message = "campo requerido")
     private String email;
+    @NotBlank(message = "campo requerido")
+    @Min(value = 6, message = "A password deve conter no minimo 6 caracteres")
     private String password;
 
 
