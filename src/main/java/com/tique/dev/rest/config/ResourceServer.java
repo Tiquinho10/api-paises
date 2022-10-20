@@ -17,7 +17,13 @@ public class ResourceServer extends ResourceServerConfigurerAdapter {
     private JwtTokenStore tokenStore;
 
 
-    private static final String[] PUBLIC = {"/oauth/token", "/myuser", "/swagger-ui.html"};
+    private static final String[] PUBLIC = {"/oauth/token", "/myuser", "/v2/api-docs",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**"};
 
 
     private static final String[] CLIENT_ADMIN = {"/paises/**"};
