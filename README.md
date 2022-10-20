@@ -1,5 +1,7 @@
-# Resumo do projecto
-Projecto em andamento, sendo realizado por integrantes do time Scuba da Alura, visando a prática com a linguagem Java e os conceitos do paradigma de orientação a objetos.
+# Api Paises
+
+A api Permite o Cadastro e Busca de paises.
+  
 
 ## 🔨 Funcionalidades do projecto
 
@@ -96,8 +98,8 @@ Link do projecto hospedado (https://tq-paises-api.herokuapp.com/paises
 
 ## Endpoints no Postman
 
-- Coleção  Postman de todas operacoes e endpoints do projecto hospedado ()
-- Coleção  Postman de todas operacoes e endpoints do projecto local ()
+- Coleção  Postman de todas operacoes e endpoints do projecto hospedado (https://www.getpostman.com/collections/d73f6b08f23110b23a66)
+- Coleção  Postman de todas operacoes e endpoints do projecto local (https://www.getpostman.com/collections/64c2b5731dadd64259d5)
 
 ## Autenticação e Autorização
 
@@ -108,17 +110,31 @@ Link do projecto hospedado (https://tq-paises-api.herokuapp.com/paises
 - `username` : `myclientid`;
 - `password` : `myclientsecret`;
 
+[](img/basic%20auth.png)
+
   Dados do usuario no formato x-www-form-urlencoded:
 - `username` : `email do usuario`;
 - `password` : `password do usuario`;
 - `grant-type` : `password`
 
+[](img/client%20credetials.png)
+
 Endpoint do login
 
 -`[POST]` `oauth/token`
+
+
 
 Acesso aos recursos protegidos
 
 - `Tipo de autorização` : `Bearer token`;
 - `Bearer token` : `token de acesso gerado pela api`
 
+[](img/Bearer%20token.png)
+
+[](img/token.png)
+
+
+### Colaborador
+
+- [Luiz Tique Junior](https://www.linkedin.com/in/luiz-tique-j%C3%BAnior-154251229/)
