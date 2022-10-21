@@ -45,16 +45,16 @@ A api Permite o Cadastro e Busca de paises.
   ``
 
 
-- `Funcionalidade 5` `Listar todos paises registrados`: Retorna todos paises registrados, acesso permitido para todos;
+- `Funcionalidade 4` `Listar todos paises registrados`: Retorna todos paises registrados, acesso permitido para todos;
 
 
-- `Funcionalidade 6` `Listar todos paises registrados de forma paginada`: Retorna todos paises registrados de forma paginada, tem os seguintes parametros : page = pagina inicial, size = elementos por pagina, sort = ordenação  da lista por qualquer uma das suas propriedades, acesso permitido para todos;
+- `Funcionalidade 5` `Listar todos paises registrados de forma paginada`: Retorna todos paises registrados de forma paginada, tem os seguintes parametros : page = pagina inicial, size = elementos por pagina, sort = ordenação  da lista por qualquer uma das suas propriedades, acesso permitido para todos;
 
 
-- `Funcionalidade 7` `Pesquisar pais por nome`: Retorna dados de paises pelo nome passado por parametro, , acesso permitido para todos;
+- `Funcionalidade 6` `Pesquisar pais por nome`: Retorna dados de paises pelo nome passado por parametro, , acesso permitido para todos;
 
 
-- `Funcionalidade 8` `Cadastro de usuarios`:A api possui dois tipos de perfil de usuario(Publico e Administrador), qualquer usuario publico pode registrar uma conta publica e somente usuarios administradores podem registrar outros administradores. é  necessario informar os seguintes dados no formato json: first-name, last-name, email e password. <br>
+- `Funcionalidade 7` `Cadastro de usuarios`:A api possui dois tipos de perfil de usuario(Publico e Administrador), qualquer usuario publico pode registrar uma conta publica e somente usuarios administradores podem registrar outros administradores. é  necessario informar os seguintes dados no formato json: first-name, last-name, email e password. <br>
   Exemplo: ``{
   "firstName" : "Usuario",
   "lastName" : "Apelido",
@@ -63,7 +63,7 @@ A api Permite o Cadastro e Busca de paises.
   }``
 
 
-- `Funcionalidade 9` `Autenticação e Autorização de usuarios`:  A api valida os dados do usuario(email e password) e gera um token de acesso  e um "refresh token"  com validade de 24 horas, para acessar os recursos protegidos da api é  necessario usar o token de acesso gerado.
+- `Funcionalidade 8` `Autenticação e Autorização de usuarios`:  A api valida os dados do usuario(email e password) e gera um token de acesso  e um "refresh token"  com validade de 24 horas, para acessar os recursos protegidos da api é  necessario usar o token de acesso gerado.
 
 
 ## ✔️ Técnicas e tecnologias utilizadas
@@ -80,7 +80,7 @@ A api Permite o Cadastro e Busca de paises.
 
 ## 📁 Acesso ao projecto hospedado
 
-Link do projecto hospedado (https://tq-paises-api.herokuapp.com/paises
+Link do projecto hospedado (https://tq-paises-api.herokuapp.com/paises/
 )
 
 ## 📁 Acesso ao projecto local
@@ -92,16 +92,16 @@ Link do projecto hospedado (https://tq-paises-api.herokuapp.com/paises
 - Abrir o projecto na sua IDE favorita;
 - Rodar o comando `mvn clean install` no terminal;
 
-##  Documentação  do projecto
+## 📄 Documentação  do projecto
 
 - A documentação  esta disponivel em (https://tq-paises-api.herokuapp.com/swagger-ui.html)
 
-## Endpoints no Postman
+## ✉ Endpoints no Postman
 
 - Coleção  Postman de todas operacoes e endpoints do projecto hospedado (https://www.getpostman.com/collections/d73f6b08f23110b23a66)
 - Coleção  Postman de todas operacoes e endpoints do projecto local (https://www.getpostman.com/collections/64c2b5731dadd64259d5)
 
-## Autenticação e Autorização
+## 🗝 Autenticação e Autorização
 
 - Para efectuar o login na api é  necessario informar os seguintes dados de autorização: 
 
@@ -116,6 +116,11 @@ Link do projecto hospedado (https://tq-paises-api.herokuapp.com/paises
 - `username` : `email do usuario`;
 - `password` : `password do usuario`;
 - `grant-type` : `password`
+
+- Para o projecto local é gerando um usuario administrador padrão  com as seguintes credenciais:
+
+  `username` : `admin@email.com`;
+  `password` : `123456`;
 
 ![](img/client%20credetials.png)
 
@@ -135,6 +140,6 @@ Acesso aos recursos protegidos
 ![](img/token.png)
 
 
-### Colaborador
+### 🧍🏽‍♂️ Colaborador
 
 - [Luiz Tique Junior](https://www.linkedin.com/in/luiz-tique-j%C3%BAnior-154251229/)
