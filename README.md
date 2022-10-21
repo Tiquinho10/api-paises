@@ -110,14 +110,14 @@ Link do projecto hospedado (https://tq-paises-api.herokuapp.com/paises
 - `username` : `myclientid`;
 - `password` : `myclientsecret`;
 
-[](img/basic%20auth.png)
+![](img/basic%20auth.png)
 
   Dados do usuario no formato x-www-form-urlencoded:
 - `username` : `email do usuario`;
 - `password` : `password do usuario`;
 - `grant-type` : `password`
 
-[](img/client%20credetials.png)
+![](img/client%20credetials.png)
 
 Endpoint do login
 
@@ -130,9 +130,9 @@ Acesso aos recursos protegidos
 - `Tipo de autorização` : `Bearer token`;
 - `Bearer token` : `token de acesso gerado pela api`
 
-[](img/Bearer%20token.png)
+![](img/Bearer%20token.png)
 
-[](img/token.png)
+![](img/token.png)
 
 
 ### Colaborador
